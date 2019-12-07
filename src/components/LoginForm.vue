@@ -20,7 +20,7 @@
         type="submit"
         variant="primary"
         class="ld-ext-right"
-        v-bind:class="{ running: loading }"
+        :class="{ running: loading }"
         :disabled="isValid"
       >
         Login

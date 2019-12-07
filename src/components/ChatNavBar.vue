@@ -3,18 +3,36 @@
     <b-navbar-brand href="#">Vue Chat</b-navbar-brand>
     <b-navbar-nav class="ml-auto">
       <b-nav-text>{{ user.name }} |</b-nav-text>
-      <b-nav-item href="#" active>Logout</b-nav-item>
+      <b-nav-item href="#" @click="onLogout" active>Logout</b-nav-item>
     </b-navbar-nav>
   </b-navbar>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "ChatNavBar",
   computed: {
-    ...mapState(["user"])
+    ...mapState(["user", "reconnext"])
+  },
+  methods: {
+    ...mapActions(["logout", "login"]),
+    ...mapMutations(["setRecnnect"]),
+    onLogout() {
+      this.$router.push({ path: "/" });
+    },
+    unload() {
+      if (this.user.username) {
+        this.setReconnect(true);
+      }
+    }
+  },
+  mounted() {
+    window.addEventListener("beforeunload", this.unload);
+    if (this.reconnect) {
+      this.login(this.user.username);
+    }
   }
 };
 </script>

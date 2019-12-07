@@ -54,13 +54,31 @@ async function connectUser(userId) {
     tokenProvider: new TokenProvider({ url: TOKEN_URL }),
     userId
   });
-  console.log(chatManager);
   currentUser = await chatManager.connect();
+  console.log(currentUser);
 
   return currentUser;
 }
 
+async function sendMessage(text) {
+  const messageId = await currentUser.sendMessage({
+    text,
+    roomId: activeRoom.id
+  });
+  return messageId;
+}
+
+export function isTyping(roomId) {
+  currentUser.isTypingIn({ roomId });
+}
+
+function disconnectUser() {
+  currentUser.disconnect();
+}
+
 export default {
   connectUser,
-  subscribeToRoom
+  subscribeToRoom,
+  sendMessage,
+  disconnectUser
 }
